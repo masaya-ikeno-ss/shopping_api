@@ -1,5 +1,6 @@
 package in.tech_camp.shopping_api.factory;
 
+import in.tech_camp.shopping_api.form.LoginForm;
 import in.tech_camp.shopping_api.form.UserForm;
 
 public class UserFactory {
@@ -15,4 +16,11 @@ public class UserFactory {
         form.setIconImage("icon.png");
         return form;
     }
+
+    public static LoginForm createDefaultLoginForm() {
+      LoginForm form = new LoginForm();
+      form.setEmail("test@example.com");
+      form.setPassword("password123");
+      return form;
+  }
 }

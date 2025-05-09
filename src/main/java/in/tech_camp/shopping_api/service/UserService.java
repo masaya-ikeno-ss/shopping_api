@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 import in.tech_camp.shopping_api.entity.UserEntity;
+import in.tech_camp.shopping_api.form.LoginForm;
 import in.tech_camp.shopping_api.form.UserForm;
 import in.tech_camp.shopping_api.repository.UserRepository;
 
@@ -51,5 +52,15 @@ public class UserService {
     userEntity.setDeletedAt(null);
 
     userRepository.save(userEntity);
+  }
+
+  public UserEntity login(LoginForm loginForm) {
+    UserEntity userEntity = userRepository.findByEmailAndDeletedAtIsNull(loginForm.getEmail())
+      .orElseThrow(() -> new IllegalArgumentException("ユーザーが存在しません"));
+
+    if (!userEntity.getPassword().equals(loginForm.getPassword())) {
+      throw new IllegalArgumentException("パスワードが正しくありません");
+    }
+    return userEntity;
   }
 }
