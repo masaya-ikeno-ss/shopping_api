@@ -49,7 +49,7 @@ public class DeleteUserTest {
     user.setDeletedAt(null);
 
     Mockito.when(userQueryService.getUserById(user.getId())).thenReturn(user);
-    Mockito.when(userService.deleteUser(user)).thenReturn(true);
+    Mockito.doNothing().when(userService).deleteUser(user);
 
     mockMvc.perform(delete("/users/" + user.getId())
             .accept(MediaType.APPLICATION_JSON))
@@ -78,7 +78,7 @@ public class DeleteUserTest {
     mockMvc.perform(delete("/users/" + user.getId())
             .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isNotFound());
   }
 
   @Test
@@ -88,6 +88,6 @@ public class DeleteUserTest {
     mockMvc.perform(delete("/users/" + 1)
             .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isNotFound());
   }
 }
