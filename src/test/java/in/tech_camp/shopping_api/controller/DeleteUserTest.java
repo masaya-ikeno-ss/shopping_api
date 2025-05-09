@@ -1,5 +1,9 @@
 package in.tech_camp.shopping_api.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
@@ -9,9 +13,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import in.tech_camp.shopping_api.entity.UserEntity;
 import in.tech_camp.shopping_api.factory.UserFactory;
@@ -20,7 +21,7 @@ import in.tech_camp.shopping_api.queryService.UserQueryService;
 import in.tech_camp.shopping_api.service.UserService;
 
 @WebMvcTest(UserController.class)
-public class GetUserTest {
+public class DeleteUserTest {
   
   @Autowired
   MockMvc mockMvc;
@@ -32,7 +33,7 @@ public class GetUserTest {
   UserService userService;
 
   @Test
-  void ユーザー情報を取得できた場合() throws Exception {
+  void ユーザーを論理削除できた場合() throws Exception {
     UserForm userForm = UserFactory.createDefaultUserForm();
     UserEntity user = new UserEntity();
     user.setId(1);
@@ -48,15 +49,16 @@ public class GetUserTest {
     user.setDeletedAt(null);
 
     Mockito.when(userQueryService.getUserById(user.getId())).thenReturn(user);
+    Mockito.doNothing().when(userService).deleteUser(user);
 
-    mockMvc.perform(get("/users/" + user.getId())
+    mockMvc.perform(delete("/users/" + user.getId())
             .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
-            .andExpect(status().isOk());
+            .andExpect(status().isNoContent());
   }
 
   @Test
-  void ユーザー情報が削除されていた場合() throws Exception {
+  void ユーザーが論理削除済みだった場合() throws Exception {
     UserForm userForm = UserFactory.createDefaultUserForm();
     UserEntity user = new UserEntity();
     user.setId(1);
@@ -73,17 +75,17 @@ public class GetUserTest {
 
     Mockito.when(userQueryService.getUserById(user.getId())).thenReturn(null);
 
-    mockMvc.perform(get("/users/" + user.getId())
+    mockMvc.perform(delete("/users/" + user.getId())
             .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andExpect(status().isNotFound());
   }
 
   @Test
-  void ユーザー情報が存在しなかった場合() throws Exception {
+  void ユーザーが存在しない場合() throws Exception {
     Mockito.when(userQueryService.getUserById(1)).thenReturn(null);
 
-    mockMvc.perform(get("/users/" + 1)
+    mockMvc.perform(delete("/users/" + 1)
             .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andExpect(status().isNotFound());
