@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import in.tech_camp.shopping_api.entity.UserEntity;
 import in.tech_camp.shopping_api.factory.UserFactory;
 import in.tech_camp.shopping_api.form.UserForm;
 import in.tech_camp.shopping_api.queryService.UserQueryService;
@@ -37,7 +38,9 @@ public class PutUserTest {
   void ユーザー情報更新が成功した場合() throws Exception {
     UserForm userForm = UserFactory.createDefaultUserForm();
     Integer id = 1;
+    UserEntity userEntity = new UserEntity();
 
+    Mockito.when(userQueryService.getUserById(id)).thenReturn(userEntity);
     Mockito.doNothing().when(userService).updateUser(userForm, id);
 
     mockMvc.perform(put("/users/update/" + id)
@@ -51,10 +54,13 @@ public class PutUserTest {
   void ユーザー情報更新が失敗した場合() throws Exception {
     UserForm userForm = UserFactory.createDefaultUserForm();
     Integer id = 1;
+    UserEntity userEntity = new UserEntity();
+
+    Mockito.when(userQueryService.getUserById(id)).thenReturn(userEntity);
 
     Mockito.doThrow(new IllegalArgumentException("Bad request")).when(userService).updateUser(userForm, id);
 
-    mockMvc.perform(put("/users/update" + id)
+    mockMvc.perform(put("/users/update/" + id)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(userForm)))
             .andDo(print())
@@ -65,10 +71,13 @@ public class PutUserTest {
   void 情報を更新したいユーザーが存在しない場合() throws Exception {
     UserForm userForm = UserFactory.createDefaultUserForm();
     Integer id = 99999;
+    UserEntity userEntity = new UserEntity();
+
+    Mockito.when(userQueryService.getUserById(id)).thenReturn(userEntity);
 
     Mockito.doThrow(new IllegalArgumentException("Bad request")).when(userService).updateUser(userForm, id);
 
-    mockMvc.perform(put("/users/update" + id)
+    mockMvc.perform(put("/users/update/" + id)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(userForm)))
             .andDo(print())
