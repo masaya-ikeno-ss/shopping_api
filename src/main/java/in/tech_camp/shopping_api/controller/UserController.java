@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,7 +45,21 @@ public class UserController {
   public ResponseEntity<Void> registerUser(@RequestBody UserForm userForm) {
     try {
       userService.registerUser(userForm);
-    return ResponseEntity.ok().build();
+      return ResponseEntity.ok().build();
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().build();
+    }
+  }
+
+  @PutMapping("/update/{id}")
+  public ResponseEntity<Void> updateUser(@RequestBody UserForm userForm, @PathVariable Integer id) {
+    try {
+      UserEntity userEntity = userQueryService.getUserById(id);
+      if (userEntity == null) {
+        return ResponseEntity.notFound().build();
+      }
+      userService.updateUser(userForm, id);
+      return ResponseEntity.ok().build();
     } catch (Exception e) {
       return ResponseEntity.badRequest().build();
     }

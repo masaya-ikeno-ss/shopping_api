@@ -36,4 +36,20 @@ public class UserService {
 
     userRepository.save(userEntity);
   }
+
+  public void updateUser(UserForm userForm, Integer id) {
+    UserEntity userEntity = new UserEntity();
+    userEntity.setId(id);
+    userEntity.setUserName(userForm.getUserName());
+    userEntity.setEmail(userForm.getEmail());
+    userEntity.setPassword(userForm.getPassword());
+    userEntity.setPhoneNumber(userForm.getPhoneNumber());
+    userEntity.setPostcode(userForm.getPostcode());
+    userEntity.setAddress(userForm.getAddress());
+    userEntity.setIconImage(userForm.getIconImage());
+    userEntity.setUpdatedAt(LocalDateTime.now());
+    userEntity.setDeletedAt(null);
+
+    userRepository.save(userEntity);
+  }
 }
