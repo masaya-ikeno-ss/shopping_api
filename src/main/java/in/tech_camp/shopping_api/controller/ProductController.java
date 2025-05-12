@@ -9,18 +9,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import in.tech_camp.shopping_api.entity.ProductEntity;
 import in.tech_camp.shopping_api.queryService.ProductQueryService;
-import in.tech_camp.shopping_api.service.ProductService;
 
 
 @RestController
 @RequestMapping("/products")
 public class ProductController {
-  private final ProductService productService;
+  // private final ProductService productService;
   private final ProductQueryService productQueryService;
 
-  public ProductController(ProductQueryService productQueryService, ProductService productService) {
+  // public ProductController(ProductQueryService productQueryService, ProductService productService) {
+    public ProductController(ProductQueryService productQueryService) {
     this.productQueryService = productQueryService;
-    this.productService = productService;
+    // this.productService = productService;
   }
   
   @GetMapping("/")
