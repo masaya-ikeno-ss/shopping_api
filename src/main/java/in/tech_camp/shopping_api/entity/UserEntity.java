@@ -18,7 +18,7 @@ public class UserEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  @Column(nullable = false, length = 50)
+  @Column(name = "username" ,nullable = false, length = 50)
   private String userName;
 
   @Column(nullable = false, length = 255)
@@ -27,7 +27,7 @@ public class UserEntity {
   @Column(nullable = false, length = 255)
   private String password;
 
-  @Column(nullable = true, length = 20)
+  @Column(name = "phone_number", nullable = true, length = 20)
   private String phoneNumber;
 
   @Column(nullable = false, length = 10)
@@ -36,10 +36,15 @@ public class UserEntity {
   @Column(nullable = false, length = 255)
   private String address;
 
-  @Column(nullable = true, length = 255)
+  @Column(name = "icon_image", nullable = true, length = 255)
   private String iconImage;
 
+  @Column(name = "created_at")
   private LocalDateTime createdAt;
+
+  @Column(name = "updated_at")
   private LocalDateTime updatedAt;
+
+  @Column(name = "deleted_at")
   private LocalDateTime deletedAt;
 }

@@ -1,5 +1,7 @@
 package in.tech_camp.shopping_api.controller;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import in.tech_camp.shopping_api.entity.UserEntity;
+import in.tech_camp.shopping_api.form.LoginForm;
 import in.tech_camp.shopping_api.form.UserForm;
 import in.tech_camp.shopping_api.queryService.UserQueryService;
 import in.tech_camp.shopping_api.service.UserService;
@@ -50,6 +53,19 @@ public class UserController {
       return ResponseEntity.badRequest().build();
     }
   }
+
+  @PostMapping("/login")
+  public ResponseEntity<UserEntity> login(@RequestBody @Validated LoginForm loginForm) {
+      try {
+        UserEntity userEntity = userService.login(loginForm);
+        return ResponseEntity.ok(userEntity);
+      } catch (IllegalArgumentException e) {
+        return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+      } catch (Exception e) {
+        return ResponseEntity.badRequest().build();
+      }
+  }
+  
 
   @PutMapping("/update/{id}")
   public ResponseEntity<Void> updateUser(@RequestBody UserForm userForm, @PathVariable Integer id) {
