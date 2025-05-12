@@ -10,4 +10,6 @@ import in.tech_camp.shopping_api.entity.UserEntity;
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
   Optional<UserEntity> findByIdAndDeletedAtIsNull(Integer id);
+
+  Optional<UserEntity> findByEmailAndDeletedAtIsNull(String email);
 }
