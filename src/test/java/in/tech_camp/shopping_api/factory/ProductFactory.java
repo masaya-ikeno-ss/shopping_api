@@ -60,4 +60,27 @@ public class ProductFactory {
 
     return Arrays.asList(product1, product2);
   }
+
+  public static ProductEntity createProductEntity() {
+    ProductEntity product1 = new ProductEntity();
+    product1.setId(1);
+    product1.setProductName("千葉県産にんじん");
+    product1.setPrice(200);
+    product1.setStockQuantity(50);
+    product1.setDescription("新鮮なニンジンです");
+    product1.setCreatedAt(LocalDateTime.now());
+    
+    CategoryEntity category1 = new CategoryEntity();
+    category1.setId(1);
+    category1.setCategoryName("にんじん");
+    product1.setCategories(new HashSet<>(Arrays.asList(category1)));
+
+    ProductImageEntity image1 = new ProductImageEntity();
+    image1.setId(1);
+    image1.setImageUrl("images/carrot.png");
+    image1.setProduct(product1);
+    product1.setProductImages(Collections.singletonList(image1));
+
+    return product1;
+  }
 }

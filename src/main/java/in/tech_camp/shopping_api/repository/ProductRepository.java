@@ -15,4 +15,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
 
   @EntityGraph(attributePaths = {"productImages", "categories"})
   List<ProductEntity> findByCategories_IdAndDeletedAtIsNull(Integer categoryId);
+
+  @EntityGraph(attributePaths = {"productImages", "categories"})
+  ProductEntity findByIdAndDeletedAtIsNull(Integer id);
 }

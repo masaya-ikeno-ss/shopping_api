@@ -1,4 +1,4 @@
-package in.tech_camp.shopping_api.controller;
+package in.tech_camp.shopping_api.controller.products;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
+import in.tech_camp.shopping_api.controller.ProductController;
 import in.tech_camp.shopping_api.entity.ProductEntity;
 import in.tech_camp.shopping_api.factory.ProductFactory;
 import in.tech_camp.shopping_api.queryService.ProductQueryService;
