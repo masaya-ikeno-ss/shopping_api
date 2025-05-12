@@ -1,4 +1,4 @@
-package in.tech_camp.shopping_api.controller;
+package in.tech_camp.shopping_api.controller.users;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import in.tech_camp.shopping_api.controller.UserController;
 import in.tech_camp.shopping_api.entity.UserEntity;
 import in.tech_camp.shopping_api.factory.UserFactory;
 import in.tech_camp.shopping_api.form.UserForm;

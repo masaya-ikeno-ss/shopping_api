@@ -18,4 +18,8 @@ public class ProductQueryService {
   public List<ProductEntity> findAll() {
     return productRepository.findAllByDeletedAtIsNull();
   }
+
+  public ProductEntity findById(Integer id) {
+    return productRepository.findByIdAndDeletedAtIsNull(id);
+  }
 }

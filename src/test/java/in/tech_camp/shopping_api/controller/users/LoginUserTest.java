@@ -1,4 +1,4 @@
-package in.tech_camp.shopping_api.controller;
+package in.tech_camp.shopping_api.controller.users;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -13,14 +13,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import in.tech_camp.shopping_api.controller.UserController;
+import in.tech_camp.shopping_api.entity.UserEntity;
 import in.tech_camp.shopping_api.factory.UserFactory;
+import in.tech_camp.shopping_api.form.LoginForm;
 import in.tech_camp.shopping_api.form.UserForm;
 import in.tech_camp.shopping_api.queryService.UserQueryService;
 import in.tech_camp.shopping_api.service.UserService;
 
 @WebMvcTest(UserController.class)
-public class PostUserTest {
-  
+public class LoginUserTest {
   @Autowired
   MockMvc mockMvc;
 
@@ -34,30 +36,29 @@ public class PostUserTest {
   ObjectMapper objectMapper;
 
   @Test
-  void ユーザー登録が成功した場合() throws Exception {
-    UserForm userForm = UserFactory.createDefaultUserForm();
+  void ログインが成功した場合() throws Exception {
+    LoginForm loginForm = UserFactory.createDefaultLoginForm();
+    UserEntity loginUser = UserFactory.createUserEntity();
 
-    Mockito.doNothing().when(userService).registerUser(userForm);
+    Mockito.when(userService.login(loginForm)).thenReturn(loginUser);
 
-    mockMvc.perform(post("/users/register")
+    mockMvc.perform(post("/users/login")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(userForm)))
+            .content(objectMapper.writeValueAsString(loginForm)))
             .andDo(print())
             .andExpect(status().isOk());
   }
 
   @Test
-  void ユーザー登録が失敗した場合() throws Exception {
-    UserForm userForm = UserFactory.createDefaultUserForm();
-    userForm.setUserName("");
+  void ログインが失敗した場合() throws Exception {
+    LoginForm loginForm = UserFactory.createDefaultLoginForm();
 
-    Mockito.doThrow(new IllegalArgumentException("Bad request")).when(userService).registerUser(userForm);
+    Mockito.doThrow(new IllegalArgumentException("Bad request")).when(userService).login(loginForm);
 
-    mockMvc.perform(post("/users/register")
+    mockMvc.perform(post("/users/login")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(userForm)))
+            .content(objectMapper.writeValueAsString(loginForm)))
             .andDo(print())
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isUnauthorized());
   }
 }
-
