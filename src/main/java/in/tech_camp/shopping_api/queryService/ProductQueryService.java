@@ -22,4 +22,8 @@ public class ProductQueryService {
   public ProductEntity findById(Integer id) {
     return productRepository.findByIdAndDeletedAtIsNull(id);
   }
+
+  public List<ProductEntity> findByCategoryId(Integer id) {
+    return productRepository.findByCategories_IdAndDeletedAtIsNull(id);
+  }
 }

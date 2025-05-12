@@ -53,6 +53,19 @@ public class ProductController {
         return ResponseEntity.badRequest().build();
       }
   }
+
+  @GetMapping("/category/{categoryId}")
+  public ResponseEntity<List<ProductEntity>> getProductByCategoryId(@PathVariable Integer categoryId) {
+      try {
+        List<ProductEntity> productEntities = productQueryService.findByCategoryId(categoryId);
+        if (productEntities == null || productEntities.isEmpty()) {
+          return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(productEntities);
+      } catch (Exception e) {
+        return ResponseEntity.badRequest().build();
+      }
+  }
   
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteProduct(@PathVariable Integer id) {
