@@ -1,0 +1,2 @@
+ALTER TABLE product_categories
+ADD COLUMN deleted_at TIMESTAMP DEFAULT NULL;

@@ -17,6 +17,7 @@ import in.tech_camp.shopping_api.controller.ProductController;
 import in.tech_camp.shopping_api.entity.ProductEntity;
 import in.tech_camp.shopping_api.factory.ProductFactory;
 import in.tech_camp.shopping_api.queryService.ProductQueryService;
+import in.tech_camp.shopping_api.service.ProductService;
 
 @WebMvcTest(ProductController.class)
 public class GetProductByIdTest {
@@ -25,6 +26,9 @@ public class GetProductByIdTest {
 
   @MockBean
   ProductQueryService productQueryService;
+
+  @MockBean
+  ProductService productService;
 
   @Test
   void 商品情報の取得ができた場合() throws Exception {
