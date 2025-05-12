@@ -9,6 +9,7 @@ import java.util.List;
 import in.tech_camp.shopping_api.entity.CategoryEntity;
 import in.tech_camp.shopping_api.entity.ProductEntity;
 import in.tech_camp.shopping_api.entity.ProductImageEntity;
+import in.tech_camp.shopping_api.form.ProductForm;
 
 public class ProductFactory {
   public static List<ProductEntity> createProductEntities() {
@@ -82,5 +83,26 @@ public class ProductFactory {
     product1.setProductImages(Collections.singletonList(image1));
 
     return product1;
+  }
+
+  public static ProductForm createProductForm() {
+    ProductForm productForm = new ProductForm();
+    productForm.setProductName("千葉県産にんじん");
+    productForm.setPrice(200);
+    productForm.setStockQuantity(50);
+    productForm.setDescription("新鮮なニンジンです");
+
+    CategoryEntity category1 = new CategoryEntity();
+    category1.setId(1);
+    category1.setCategoryName("にんじん");
+
+    ProductImageEntity image1 = new ProductImageEntity();
+    image1.setId(1);
+    image1.setImageUrl("images/carrot.png");
+
+    productForm.setCategoryIds(Arrays.asList(category1.getId()));
+    productForm.setImageIds(Arrays.asList(image1.getId()));
+
+    return productForm;
   }
 }
