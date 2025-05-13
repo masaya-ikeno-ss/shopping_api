@@ -29,4 +29,17 @@ public class CartItemFactory {
 
     return cartItemEntities;
   }
+
+  public static CartItemEntity createCartItem(UserEntity user, ProductEntity product) {
+    CartItemEntity cartItemEntity = new CartItemEntity();
+    cartItemEntity.setId(1);
+    cartItemEntity.setUser(user);
+    cartItemEntity.setProduct(product);
+    cartItemEntity.setQuantity(2);
+    cartItemEntity.setCreatedAt(LocalDateTime.now());
+    cartItemEntity.setUpdatedAt(LocalDateTime.now());
+    cartItemEntity.setDeletedAt(null);
+
+    return cartItemEntity;
+  }
 }
