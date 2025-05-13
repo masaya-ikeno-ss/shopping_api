@@ -55,8 +55,7 @@ public class UserService {
   }
 
   public UserEntity login(LoginForm loginForm) {
-    UserEntity userEntity = userRepository.findByEmailAndDeletedAtIsNull(loginForm.getEmail())
-      .orElseThrow(() -> new IllegalArgumentException("ユーザーが存在しません"));
+    UserEntity userEntity = userRepository.findByEmailAndDeletedAtIsNull(loginForm.getEmail());
 
     if (!userEntity.getPassword().equals(loginForm.getPassword())) {
       throw new IllegalArgumentException("パスワードが正しくありません");

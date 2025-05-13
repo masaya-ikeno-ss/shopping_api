@@ -14,7 +14,7 @@ public class UserQueryService {
   }
 
   public UserEntity getUserById(Integer id) {
-    return userRepository.findByIdAndDeletedAtIsNull(id).orElse(null);
+    return userRepository.findByIdAndDeletedAtIsNull(id);
   }
   
 }
