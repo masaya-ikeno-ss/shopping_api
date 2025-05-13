@@ -101,7 +101,7 @@ public class ProductFactory {
     image1.setImageUrl("images/carrot.png");
 
     productForm.setCategoryIds(Arrays.asList(category1.getId()));
-    productForm.setImageIds(Arrays.asList(image1.getId()));
+    productForm.setImageUrls(Arrays.asList(image1.getImageUrl()));
 
     return productForm;
   }

@@ -3,15 +3,20 @@ package in.tech_camp.shopping_api.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import in.tech_camp.shopping_api.entity.ProductEntity;
+import in.tech_camp.shopping_api.form.ProductForm;
 import in.tech_camp.shopping_api.queryService.ProductQueryService;
 import in.tech_camp.shopping_api.service.ProductService;
+
 
 
 
@@ -66,6 +71,17 @@ public class ProductController {
         return ResponseEntity.badRequest().build();
       }
   }
+
+  @PostMapping("/register")
+  public ResponseEntity<Void> registerProduct(@RequestBody @Validated ProductForm product) {
+    try {
+      productService.registerProduct(product);
+      return ResponseEntity.ok().build();
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().build();
+    }
+  }
+  
   
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteProduct(@PathVariable Integer id) {

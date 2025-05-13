@@ -30,5 +30,5 @@ public class ProductForm {
   @Size(min = 1, message = "カテゴリを1つ以上選択してください", groups = ValidationPriority2.class)
   private List<Integer> categoryIds;
 
-  private List<Integer> imageIds;
+  private List<String> imageUrls;
 }
