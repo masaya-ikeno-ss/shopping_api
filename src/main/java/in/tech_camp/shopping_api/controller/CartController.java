@@ -39,7 +39,6 @@ public class CartController {
      return ResponseEntity.badRequest().build();
     }
   }
-  
 
   @GetMapping("/users/{userId}")
   public ResponseEntity<List<CartItemEntity>> findCartsByUserId(@PathVariable Integer userId) {
