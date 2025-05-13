@@ -58,6 +58,29 @@ public class ProductService {
     productRepository.save(productEntity);
   }
 
+  public void updateProduct(ProductForm productForm, Integer productId) {
+    ProductEntity productEntity = new ProductEntity();
+    productEntity.setId(productId);
+    productEntity.setProductName(productForm.getProductName());
+    productEntity.setPrice(productForm.getPrice());
+    productEntity.setStockQuantity(productForm.getStockQuantity());
+    productEntity.setDescription(productForm.getDescription());
+    
+    Set<CategoryEntity> categories = new HashSet<>(categoryRepository.findAllById(productForm.getCategoryIds()));
+    productEntity.setCategories(categories);
+    
+    List<ProductImageEntity> productImageEntities = new ArrayList<>();
+    for (String productImageUrl : productForm.getImageUrls()) {
+      ProductImageEntity productImageEntity = new ProductImageEntity();
+      productImageEntity.setImageUrl(productImageUrl);
+      productImageEntity.setProduct(productEntity);
+      productImageEntities.add(productImageEntity);
+    }
+    productEntity.setProductImages(productImageEntities);
+
+    productRepository.save(productEntity);
+  }
+
   @Transactional
   public void deleteProduct(ProductEntity productEntity) {
     productEntity.setDeletedAt(LocalDateTime.now());

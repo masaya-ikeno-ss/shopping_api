@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,7 @@ import in.tech_camp.shopping_api.entity.ProductEntity;
 import in.tech_camp.shopping_api.form.ProductForm;
 import in.tech_camp.shopping_api.queryService.ProductQueryService;
 import in.tech_camp.shopping_api.service.ProductService;
+
 
 
 
@@ -82,6 +84,19 @@ public class ProductController {
     }
   }
   
+  @PutMapping("update/{id}")
+  public ResponseEntity<Void> updateProduct(@RequestBody @Validated ProductForm productForm, @PathVariable Integer id) {
+    try {
+      ProductEntity productEntity = productQueryService.findById(id);
+      if (productEntity == null) {
+        return ResponseEntity.notFound().build();
+      }
+      productService.updateProduct(productForm, id);
+      return ResponseEntity.ok().build();
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().build();
+    }
+  }
   
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteProduct(@PathVariable Integer id) {

@@ -68,7 +68,7 @@ public class UserController {
   
 
   @PutMapping("/update/{id}")
-  public ResponseEntity<Void> updateUser(@RequestBody UserForm userForm, @PathVariable Integer id) {
+  public ResponseEntity<Void> updateUser(@RequestBody @Validated UserForm userForm, @PathVariable Integer id) {
     try {
       UserEntity userEntity = userQueryService.getUserById(id);
       if (userEntity == null) {
