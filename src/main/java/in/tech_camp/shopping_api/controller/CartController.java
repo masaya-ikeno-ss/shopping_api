@@ -16,6 +16,8 @@ import in.tech_camp.shopping_api.queryService.CartItemQueryService;
 import in.tech_camp.shopping_api.service.CartItemService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 
@@ -62,6 +64,20 @@ public class CartController {
   public ResponseEntity<Void> addToCart(@RequestBody @Validated CartForm cartForm) {
     try {
       cartItemService.addToCart(cartForm);
+      return ResponseEntity.ok().build();
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().build();
+    }
+  }
+
+  @PutMapping("update/{id}")
+  public ResponseEntity<Void> updateCart(@RequestBody @Validated CartForm cartForm, @PathVariable Integer id) {
+    try {
+      CartItemEntity cartItemEntity = cartItemQueryService.findById(id);
+      if (cartItemEntity == null) {
+        return ResponseEntity.notFound().build();
+      }
+      cartItemService.updateCart(cartForm, id);
       return ResponseEntity.ok().build();
     } catch (Exception e) {
       return ResponseEntity.badRequest().build();
