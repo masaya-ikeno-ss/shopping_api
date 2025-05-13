@@ -27,6 +27,7 @@ public class UserFactory {
 
   public static UserEntity createUserEntity() {
     UserEntity userEntity = new UserEntity();
+    userEntity.setId(1);
     userEntity.setUserName("テストユーザー");
     userEntity.setEmail("test@example.com");
     userEntity.setPassword("password123");

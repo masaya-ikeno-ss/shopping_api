@@ -10,15 +10,15 @@ import in.tech_camp.shopping_api.entity.UserEntity;
 
 public class CartItemFactory {
   
-  public List<CartItemEntity> createCartItemsEqualsUser(UserEntity user, List<ProductEntity> products) {
+  public static List<CartItemEntity> createCartItemsEqualsUser(UserEntity user, List<ProductEntity> products) {
     List<CartItemEntity> cartItemEntities = new ArrayList<>();
     
     int idCount = 1;
     for (ProductEntity product : products) {
       CartItemEntity cartItemEntity = new CartItemEntity();
       cartItemEntity.setId(idCount);
-      cartItemEntity.setUserEntity(user);
-      cartItemEntity.setProductEntity(product);
+      cartItemEntity.setUser(user);
+      cartItemEntity.setProduct(product);
       cartItemEntity.setQuantity(2);
       cartItemEntity.setCreatedAt(LocalDateTime.now());
       cartItemEntity.setUpdatedAt(LocalDateTime.now());
