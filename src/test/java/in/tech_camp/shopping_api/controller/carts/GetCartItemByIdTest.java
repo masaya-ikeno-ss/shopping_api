@@ -1,7 +1,5 @@
 package in.tech_camp.shopping_api.controller.carts;
 
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +22,7 @@ import in.tech_camp.shopping_api.queryService.CartItemQueryService;
 import in.tech_camp.shopping_api.service.CartItemService;
 
 @WebMvcTest(CartController.class)
-public class GetCartItemsByUserIdTest {
+public class GetCartItemByIdTest {
   
   @Autowired
   MockMvc mockMvc;
@@ -36,27 +34,26 @@ public class GetCartItemsByUserIdTest {
   CartItemService cartItemService;
 
   @Test
-  void ユーザー情報を用いてカート情報の取得ができた場合() throws Exception {
+  void IDを用いてカート情報の取得ができた場合() throws Exception {
     UserEntity user = UserFactory.createUserEntity();
-    List<ProductEntity> products = ProductFactory.createProductEntities();
+    ProductEntity product = ProductFactory.createProductEntity();
 
-    List<CartItemEntity> cartItems = CartItemFactory.createCartItemsEqualsUser(user, products);
+    CartItemEntity cartItem = CartItemFactory.createCartItem(user, product);
 
-    Mockito.when(cartItemQueryService.findByUserId(user.getId())).thenReturn(cartItems);
+    Mockito.when(cartItemQueryService.findById(cartItem.getId())).thenReturn(cartItem);
 
-    mockMvc.perform(get("/carts/users/" + user.getId())
+    mockMvc.perform(get("/carts/" + user.getId())
             .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andExpect(status().isOk());
   }
 
   @Test
-  void ユーザー情報を用いてカート情報の取得ができなかった場合() throws Exception {
-    UserEntity user = UserFactory.createUserEntity();
+  void IDを用いてカート情報の取得ができなかった場合() throws Exception {
+    Integer wrongId = 999;
+    Mockito.when(cartItemQueryService.findById(wrongId)).thenReturn(null);
 
-    Mockito.when(cartItemQueryService.findByUserId(user.getId())).thenReturn(null);
-
-    mockMvc.perform(get("/carts/users/" + user.getId())
+    mockMvc.perform(get("/carts/" + wrongId)
             .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andExpect(status().isNotFound());

@@ -1,16 +1,15 @@
 package in.tech_camp.shopping_api.controller.carts;
 
-import java.util.List;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import in.tech_camp.shopping_api.controller.CartController;
@@ -24,7 +23,7 @@ import in.tech_camp.shopping_api.queryService.CartItemQueryService;
 import in.tech_camp.shopping_api.service.CartItemService;
 
 @WebMvcTest(CartController.class)
-public class GetCartItemsByUserIdTest {
+public class DeleteCartItemTest {
   
   @Autowired
   MockMvc mockMvc;
@@ -36,29 +35,25 @@ public class GetCartItemsByUserIdTest {
   CartItemService cartItemService;
 
   @Test
-  void ユーザー情報を用いてカート情報の取得ができた場合() throws Exception {
-    UserEntity user = UserFactory.createUserEntity();
-    List<ProductEntity> products = ProductFactory.createProductEntities();
+  void カート内の商品が正常に削除できた場合() throws Exception {
+    UserEntity userEntity = UserFactory.createUserEntity();
+    ProductEntity productEntity = ProductFactory.createProductEntity();
+    CartItemEntity cartItemEntity = CartItemFactory.createCartItem(userEntity, productEntity);
+    when(cartItemQueryService.findById(cartItemEntity.getId())).thenReturn(cartItemEntity);
+    doNothing().when(cartItemService).deleteCart(cartItemEntity);
 
-    List<CartItemEntity> cartItems = CartItemFactory.createCartItemsEqualsUser(user, products);
-
-    Mockito.when(cartItemQueryService.findByUserId(user.getId())).thenReturn(cartItems);
-
-    mockMvc.perform(get("/carts/users/" + user.getId())
+    mockMvc.perform(delete("/carts/" + cartItemEntity.getId())
             .accept(MediaType.APPLICATION_JSON))
-            .andDo(print())
-            .andExpect(status().isOk());
+        .andExpect(status().isNoContent());
   }
 
   @Test
-  void ユーザー情報を用いてカート情報の取得ができなかった場合() throws Exception {
-    UserEntity user = UserFactory.createUserEntity();
+  void カート内の商品が見つからず削除できない場合() throws Exception {
+    Integer wrongId = 999;
+    when(cartItemQueryService.findById(wrongId)).thenReturn(null);
 
-    Mockito.when(cartItemQueryService.findByUserId(user.getId())).thenReturn(null);
-
-    mockMvc.perform(get("/carts/users/" + user.getId())
+    mockMvc.perform(delete("/carts/" + wrongId)
             .accept(MediaType.APPLICATION_JSON))
-            .andDo(print())
-            .andExpect(status().isNotFound());
+        .andExpect(status().isNotFound());
   }
 }

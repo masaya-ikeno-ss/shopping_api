@@ -15,6 +15,10 @@ public class CartItemQueryService {
     this.cartItemRepository = cartItemRepository;
   }
 
+  public CartItemEntity findById(Integer id) {
+    return cartItemRepository.findByIdAndDeletedAtIsNull(id);
+  }
+
   public List<CartItemEntity> findByUserId(Integer userId) {
     return cartItemRepository.findByUserIdAndDeletedAtIsNull(userId);
   }

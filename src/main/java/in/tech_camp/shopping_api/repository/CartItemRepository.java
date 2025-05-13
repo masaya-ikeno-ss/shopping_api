@@ -10,4 +10,6 @@ import in.tech_camp.shopping_api.entity.CartItemEntity;
 @Repository
 public interface CartItemRepository extends JpaRepository<CartItemEntity, Integer> {
   List<CartItemEntity> findByUserIdAndDeletedAtIsNull(Integer userId);
+
+  CartItemEntity findByIdAndDeletedAtIsNull(Integer id);
 }
