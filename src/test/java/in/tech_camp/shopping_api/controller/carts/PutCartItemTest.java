@@ -7,13 +7,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import in.tech_camp.shopping_api.controller.CartController;
+import in.tech_camp.shopping_api.entity.CartItemEntity;
 import in.tech_camp.shopping_api.entity.ProductEntity;
 import in.tech_camp.shopping_api.entity.UserEntity;
 import in.tech_camp.shopping_api.factory.CartItemFactory;
@@ -24,7 +25,7 @@ import in.tech_camp.shopping_api.queryService.CartItemQueryService;
 import in.tech_camp.shopping_api.service.CartItemService;
 
 @WebMvcTest(CartController.class)
-public class PostCartItemTest {
+public class PutCartItemTest {
   
   @Autowired
   MockMvc mockMvc;
@@ -39,14 +40,17 @@ public class PostCartItemTest {
   ObjectMapper objectMapper;
 
   @Test
-  void カートへの登録が成功した場合() throws Exception {
+  void カート情報更新が成功した場合() throws Exception {
     UserEntity userEntity = UserFactory.createUserEntity();
     ProductEntity productEntity = ProductFactory.createProductEntity();
     CartForm cartForm = CartItemFactory.createCartForm(userEntity, productEntity);
+    Integer id = 1;
+    CartItemEntity cartItemEntity = new CartItemEntity();
 
-    Mockito.doNothing().when(cartItemService).addToCart(cartForm);
+    Mockito.when(cartItemQueryService.findById(id)).thenReturn(cartItemEntity);
+    Mockito.doNothing().when(cartItemService).updateCart(cartForm, id);
 
-    mockMvc.perform(post("/carts/add")
+    mockMvc.perform(put("/carts/update/" + id)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(cartForm)))
             .andDo(print())
@@ -54,15 +58,17 @@ public class PostCartItemTest {
   }
 
   @Test
-  void カートへの登録が失敗した場合() throws Exception {
+  void カート情報更新が失敗した場合() throws Exception {
     UserEntity userEntity = UserFactory.createUserEntity();
     ProductEntity productEntity = ProductFactory.createProductEntity();
     CartForm cartForm = CartItemFactory.createCartForm(userEntity, productEntity);
-    cartForm.setProductId(null);
+    Integer id = 1;
+    CartItemEntity cartItemEntity = new CartItemEntity();
 
-    Mockito.doThrow(new IllegalArgumentException("Bad request")).when(cartItemService).addToCart(cartForm);
+    Mockito.when(cartItemQueryService.findById(id)).thenReturn(cartItemEntity);
+    Mockito.doThrow(new IllegalArgumentException("Bad request")).when(cartItemService).updateCart(cartForm, id);
 
-    mockMvc.perform(post("/carts/add")
+    mockMvc.perform(put("/carts/update/" + id)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(cartForm)))
             .andDo(print())

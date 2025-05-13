@@ -41,6 +41,18 @@ public class CartItemService {
     cartItemRepository.save(cartItemEntity);
   }
 
+  public void updateCart(CartForm cartForm, Integer id) {
+    CartItemEntity cartItemEntity = cartItemRepository.findByIdAndDeletedAtIsNull(id);
+    UserEntity userEntity = userRepository.findByIdAndDeletedAtIsNull(cartForm.getUserId());
+    ProductEntity productEntity = productRepository.findByIdAndDeletedAtIsNull(cartForm.getProductId());
+    cartItemEntity.setUser(userEntity);
+    cartItemEntity.setProduct(productEntity);
+    cartItemEntity.setQuantity(cartForm.getQuantity());
+    cartItemEntity.setUpdatedAt(LocalDateTime.now());
+
+    cartItemRepository.save(cartItemEntity);
+  }
+
   public void deleteCart(CartItemEntity cartItemEntity) {
     cartItemEntity.setDeletedAt(LocalDateTime.now());
     cartItemRepository.save(cartItemEntity);

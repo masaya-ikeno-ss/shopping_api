@@ -65,6 +65,7 @@ public class ProductService {
     productEntity.setPrice(productForm.getPrice());
     productEntity.setStockQuantity(productForm.getStockQuantity());
     productEntity.setDescription(productForm.getDescription());
+    productEntity.setUpdatedAt(LocalDateTime.now());
     
     Set<CategoryEntity> categories = new HashSet<>(categoryRepository.findAllById(productForm.getCategoryIds()));
     productEntity.setCategories(categories);
