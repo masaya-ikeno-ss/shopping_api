@@ -7,6 +7,7 @@ import java.util.List;
 import in.tech_camp.shopping_api.entity.CartItemEntity;
 import in.tech_camp.shopping_api.entity.ProductEntity;
 import in.tech_camp.shopping_api.entity.UserEntity;
+import in.tech_camp.shopping_api.form.CartForm;
 
 public class CartItemFactory {
   
@@ -41,5 +42,14 @@ public class CartItemFactory {
     cartItemEntity.setDeletedAt(null);
 
     return cartItemEntity;
+  }
+
+  public static CartForm createCartForm(UserEntity userEntity, ProductEntity productEntity) {
+    CartForm cartForm = new CartForm();
+    cartForm.setUserId(userEntity.getId());
+    cartForm.setProductId(productEntity.getId());
+    cartForm.setQuantity(2);
+
+    return cartForm;
   }
 }

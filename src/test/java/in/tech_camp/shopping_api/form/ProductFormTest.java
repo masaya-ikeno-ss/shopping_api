@@ -7,8 +7,6 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.validation.BindingResult;
 
 import in.tech_camp.shopping_api.factory.ProductFactory;
 import in.tech_camp.shopping_api.validation.ValidationPriority1;
@@ -20,7 +18,6 @@ import jakarta.validation.ValidatorFactory;
 
 public class ProductFormTest {
   private Validator validator;
-  private BindingResult bindingResult;
   private ProductForm productForm;
 
   @BeforeEach
@@ -28,7 +25,6 @@ public class ProductFormTest {
     productForm = ProductFactory.createProductForm();
     ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     validator = factory.getValidator();
-    bindingResult = Mockito.mock(BindingResult.class);
   }
 
   @Test
