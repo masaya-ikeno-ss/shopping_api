@@ -1,7 +1,6 @@
 package in.tech_camp.shopping_api.controller.carts;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -50,7 +49,6 @@ public class GetCartItemsByUserIdTest {
   @Test
   void ユーザー情報を用いてカート情報の取得ができなかった場合() throws Exception {
     UserEntity user = UserFactory.createUserEntity();
-    List<ProductEntity> products = ProductFactory.createProductEntities();
 
     Mockito.when(cartItemQueryService.findByUserId(user.getId())).thenReturn(null);
 
