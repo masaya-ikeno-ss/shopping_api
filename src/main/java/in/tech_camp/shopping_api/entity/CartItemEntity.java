@@ -2,6 +2,8 @@ package in.tech_camp.shopping_api.entity;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -24,11 +26,12 @@ public class CartItemEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false)
-  private UserEntity userEntity;
+  @JsonIgnore
+  private UserEntity user;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "product_id", nullable = false)
-  private ProductEntity productEntity;
+  private ProductEntity product;
 
   @Column(nullable = false)
   private Integer quantity;
