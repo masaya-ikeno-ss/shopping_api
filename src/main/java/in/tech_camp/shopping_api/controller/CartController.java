@@ -7,16 +7,18 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import in.tech_camp.shopping_api.entity.CartItemEntity;
+import in.tech_camp.shopping_api.entity.UserEntity;
 import in.tech_camp.shopping_api.form.CartForm;
 import in.tech_camp.shopping_api.queryService.CartItemQueryService;
+import in.tech_camp.shopping_api.queryService.UserQueryService;
 import in.tech_camp.shopping_api.service.CartItemService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PutMapping;
 
 
 
@@ -28,10 +30,15 @@ public class CartController {
 
   private final CartItemService cartItemService;
   private final CartItemQueryService cartItemQueryService;
+  private final UserQueryService userQueryService;
 
-  public CartController(CartItemQueryService cartItemQueryService, CartItemService cartItemService) {
+  public CartController(
+    CartItemQueryService cartItemQueryService, 
+    CartItemService cartItemService,
+    UserQueryService userQueryService) {
     this.cartItemQueryService = cartItemQueryService;
     this.cartItemService = cartItemService;
+    this.userQueryService = userQueryService;
   }
 
   @GetMapping("/{id}")
@@ -92,6 +99,20 @@ public class CartController {
         return ResponseEntity.notFound().build();
       }
       cartItemService.deleteCart(cartItemEntity);
+      return ResponseEntity.noContent().build();
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().build();
+    }
+  }
+
+  @DeleteMapping("/users/{userId}")
+  public ResponseEntity<Void> deleteCartsByUser(@PathVariable Integer userId) {
+    try {
+      UserEntity userEntity = userQueryService.getUserById(userId);
+      if (userEntity == null) {
+        return ResponseEntity.notFound().build();
+      }
+      cartItemService.deleteCartsByUser(userEntity);
       return ResponseEntity.noContent().build();
     } catch (Exception e) {
       return ResponseEntity.badRequest().build();

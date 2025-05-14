@@ -21,6 +21,7 @@ import in.tech_camp.shopping_api.factory.CartItemFactory;
 import in.tech_camp.shopping_api.factory.ProductFactory;
 import in.tech_camp.shopping_api.factory.UserFactory;
 import in.tech_camp.shopping_api.queryService.CartItemQueryService;
+import in.tech_camp.shopping_api.queryService.UserQueryService;
 import in.tech_camp.shopping_api.service.CartItemService;
 
 @WebMvcTest(CartController.class)
@@ -34,6 +35,9 @@ public class GetCartItemsByUserIdTest {
 
   @MockBean
   CartItemService cartItemService;
+
+  @MockBean
+  UserQueryService userQueryService;
 
   @Test
   void ユーザー情報を用いてカート情報の取得ができた場合() throws Exception {
