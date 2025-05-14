@@ -1,6 +1,7 @@
 package in.tech_camp.shopping_api.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -56,5 +57,13 @@ public class CartItemService {
   public void deleteCart(CartItemEntity cartItemEntity) {
     cartItemEntity.setDeletedAt(LocalDateTime.now());
     cartItemRepository.save(cartItemEntity);
+  }
+
+  public void deleteCartsByUser(UserEntity userEntity) {
+    List<CartItemEntity> cartItemEntities = cartItemRepository.findByUserIdAndDeletedAtIsNull(userEntity.getId());
+    for (CartItemEntity cartItemEntity : cartItemEntities) {
+      cartItemEntity.setDeletedAt(LocalDateTime.now());
+    }
+    cartItemRepository.saveAll(cartItemEntities);
   }
 }

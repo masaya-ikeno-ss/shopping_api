@@ -21,6 +21,7 @@ import in.tech_camp.shopping_api.factory.ProductFactory;
 import in.tech_camp.shopping_api.factory.UserFactory;
 import in.tech_camp.shopping_api.form.CartForm;
 import in.tech_camp.shopping_api.queryService.CartItemQueryService;
+import in.tech_camp.shopping_api.queryService.UserQueryService;
 import in.tech_camp.shopping_api.service.CartItemService;
 
 @WebMvcTest(CartController.class)
@@ -34,6 +35,9 @@ public class PostCartItemTest {
 
   @MockBean
   CartItemService cartItemService;
+
+  @MockBean
+  UserQueryService userQueryService;
 
   @Autowired
   ObjectMapper objectMapper;
