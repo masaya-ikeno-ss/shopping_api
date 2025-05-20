@@ -35,7 +35,6 @@ public class OrderController {
 
   @PostMapping("/carts/{userId}/orderPreview")
   public ResponseEntity<OrderPreviewResponseDto> findOrder(
-    @RequestBody PaymentMethod paymentMethod, 
     @PathVariable Integer userId) {
     try {
       UserEntity userEntity = userQueryService.getUserById(userId);
@@ -43,7 +42,24 @@ public class OrderController {
       if (userEntity == null || cartItemEntities == null || cartItemEntities.isEmpty()) {
         return ResponseEntity.notFound().build();
       }
-      OrderPreviewResponseDto order = orderService.returnOrder(paymentMethod, cartItemEntities, userEntity);
+      OrderPreviewResponseDto order = orderService.returnOrder(cartItemEntities, userEntity);
+      return ResponseEntity.ok(order);
+    } catch (Exception e) {
+     return ResponseEntity.badRequest().build();
+    }
+  }
+
+  @PostMapping("/carts/{userId}/order")
+  public ResponseEntity<OrderPreviewResponseDto> registerOrder(
+    @RequestBody PaymentMethod paymentMethod,
+    @PathVariable Integer userId) {
+    try {
+      UserEntity userEntity = userQueryService.getUserById(userId);
+      List<CartItemEntity> cartItemEntities = cartItemQueryService.findByUserId(userId);
+      if (userEntity == null || cartItemEntities == null || cartItemEntities.isEmpty()) {
+        return ResponseEntity.notFound().build();
+      }
+      OrderPreviewResponseDto order = orderService.registerOrder(paymentMethod, cartItemEntities, userEntity);
       return ResponseEntity.ok(order);
     } catch (Exception e) {
      return ResponseEntity.badRequest().build();
