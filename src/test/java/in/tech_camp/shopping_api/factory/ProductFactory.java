@@ -1,11 +1,13 @@
 package in.tech_camp.shopping_api.factory;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
+import in.tech_camp.shopping_api.dto.ProductDto;
 import in.tech_camp.shopping_api.entity.CategoryEntity;
 import in.tech_camp.shopping_api.entity.ProductEntity;
 import in.tech_camp.shopping_api.entity.ProductImageEntity;
@@ -104,5 +106,69 @@ public class ProductFactory {
     productForm.setImageUrls(Arrays.asList(image1.getImageUrl()));
 
     return productForm;
+  }
+
+  public static ProductDto createProductDto() {
+    ProductDto dto = new ProductDto();
+    dto.setId(1);
+    dto.setProductName("千葉県産にんじん");
+    dto.setPrice(200);
+    dto.setStockQuantity(20);
+    dto.setDescription("新鮮なニンジンです");
+
+    CategoryEntity category1 = new CategoryEntity();
+    category1.setId(1);
+    category1.setCategoryName("にんじん");
+
+    ProductImageEntity image1 = new ProductImageEntity();
+    image1.setId(1);
+    image1.setImageUrl("images/carrot.png");
+
+    dto.setCategories(new HashSet<>(Arrays.asList(category1.getCategoryName())));
+    dto.setProductImages(Arrays.asList(image1.getImageUrl()));
+
+    return dto;
+  }
+
+  public static List<ProductDto> createProductDtoList() {
+    List<ProductDto> dtoList = new ArrayList<>();
+    ProductDto dto = new ProductDto();
+    dto.setId(1);
+    dto.setProductName("千葉県産にんじん");
+    dto.setPrice(200);
+    dto.setStockQuantity(20);
+    dto.setDescription("新鮮なニンジンです");
+
+    CategoryEntity category1 = new CategoryEntity();
+    category1.setId(1);
+    category1.setCategoryName("にんじん");
+
+    ProductImageEntity image1 = new ProductImageEntity();
+    image1.setId(1);
+    image1.setImageUrl("images/carrot.png");
+
+    dto.setCategories(new HashSet<>(Arrays.asList(category1.getCategoryName())));
+    dto.setProductImages(Arrays.asList(image1.getImageUrl()));
+
+    dtoList.add(dto);
+
+    ProductDto dto2 = new ProductDto();
+    dto2.setId(2);
+    dto2.setProductName("茨城県産にんじん");
+    dto2.setPrice(400);
+    dto2.setStockQuantity(60);
+    dto2.setDescription("おいしいニンジンです");
+
+
+    ProductImageEntity image2 = new ProductImageEntity();
+    image2.setId(2);
+    image2.setImageUrl("images/carrot2.png");
+
+    dto2.setCategories(new HashSet<>(Arrays.asList(category1.getCategoryName())));
+    dto2.setProductImages(Arrays.asList(image2.getImageUrl()));
+
+    dtoList.add(dto2);
+
+    return dtoList;
   }
 }

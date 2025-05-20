@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import in.tech_camp.shopping_api.controller.ProductController;
+import in.tech_camp.shopping_api.dto.ProductDto;
 import in.tech_camp.shopping_api.entity.ProductEntity;
 import in.tech_camp.shopping_api.factory.ProductFactory;
 import in.tech_camp.shopping_api.queryService.ProductQueryService;
@@ -35,14 +36,15 @@ public class GetProductsByCategoryTest {
   @Test
   void カテゴリを用いて商品情報の取得ができた場合() throws Exception {
     Integer categoryId = 1;
+    String categoryName = "にんじん";
 
-    List<ProductEntity> allProducts = ProductFactory.createProductEntities();
+    List<ProductDto> allProducts = ProductFactory.createProductDtoList();
 
-    List<ProductEntity> filteredProducts = allProducts.stream()
-        .filter(p -> p.getCategories().stream().anyMatch(c -> c.getId().equals(categoryId)))
+    List<ProductDto> filteredProducts = allProducts.stream()
+        .filter(p -> p.getCategories().contains(categoryName))
         .collect(Collectors.toList());
 
-    Mockito.when(productQueryService.findByCategoryId(categoryId)).thenReturn(filteredProducts);
+    Mockito.when(productQueryService.findByCategoryIdForDto(categoryId)).thenReturn(filteredProducts);
 
     mockMvc.perform(get("/products/category/" + categoryId)
             .accept(MediaType.APPLICATION_JSON))
@@ -53,11 +55,11 @@ public class GetProductsByCategoryTest {
   @Test
   void カテゴリを用いて商品情報の取得ができなかった場合() throws Exception {
     Integer wrongCategoryId = 99;
-    Mockito.when(productQueryService.findByCategoryId(wrongCategoryId)).thenReturn(Collections.emptyList());
+    Mockito.when(productQueryService.findByCategoryIdForDto(wrongCategoryId)).thenReturn(Collections.emptyList());
 
     mockMvc.perform(get("/products/category/" + wrongCategoryId)
             .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
-            .andExpect(status().isNotFound());
+            .andExpect(status().isOk());
   }
 }

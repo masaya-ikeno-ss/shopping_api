@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import in.tech_camp.shopping_api.dto.ProductDto;
 import in.tech_camp.shopping_api.entity.ProductEntity;
 import in.tech_camp.shopping_api.form.ProductForm;
 import in.tech_camp.shopping_api.queryService.ProductQueryService;
@@ -36,39 +37,33 @@ public class ProductController {
   }
   
   @GetMapping("/")
-  public ResponseEntity<List<ProductEntity>> getProductAll() {
+  public ResponseEntity<List<ProductDto>> getProductAll() {
       try {
-        List<ProductEntity> productEntities = productQueryService.findAll();
-        if (productEntities == null || productEntities.isEmpty()) {
-          return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(productEntities);
+        List<ProductDto> productDtos = productQueryService.findAllForDto();
+        return ResponseEntity.ok(productDtos);
       } catch (Exception e) {
         return ResponseEntity.badRequest().build();
       }
   }
   
   @GetMapping("/{productId}")
-  public ResponseEntity<ProductEntity> getProductById(@PathVariable Integer productId) {
+  public ResponseEntity<ProductDto> getProductById(@PathVariable Integer productId) {
       try {
-        ProductEntity productEntity = productQueryService.findById(productId);
-        if (productEntity == null) {
+        ProductDto productDto = productQueryService.findByIdForDto(productId);
+        if (productDto == null) {
           return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(productEntity);
+        return ResponseEntity.ok(productDto);
       } catch (Exception e) {
         return ResponseEntity.badRequest().build();
       }
   }
 
   @GetMapping("/category/{categoryId}")
-  public ResponseEntity<List<ProductEntity>> getProductByCategoryId(@PathVariable Integer categoryId) {
+  public ResponseEntity<List<ProductDto>> getProductByCategoryId(@PathVariable Integer categoryId) {
       try {
-        List<ProductEntity> productEntities = productQueryService.findByCategoryId(categoryId);
-        if (productEntities == null || productEntities.isEmpty()) {
-          return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(productEntities);
+        List<ProductDto> productDtos = productQueryService.findByCategoryIdForDto(categoryId);
+        return ResponseEntity.ok(productDtos);
       } catch (Exception e) {
         return ResponseEntity.badRequest().build();
       }
