@@ -12,6 +12,7 @@ import in.tech_camp.shopping_api.form.CartForm;
 import in.tech_camp.shopping_api.repository.CartItemRepository;
 import in.tech_camp.shopping_api.repository.ProductRepository;
 import in.tech_camp.shopping_api.repository.UserRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class CartItemService {
@@ -28,6 +29,7 @@ public class CartItemService {
     this.productRepository = productRepository;
   }
 
+  @Transactional
   public void addToCart(CartForm cartForm) {
     CartItemEntity cartItemEntity = new CartItemEntity();
     UserEntity userEntity = userRepository.findByIdAndDeletedAtIsNull(cartForm.getUserId());
@@ -42,6 +44,7 @@ public class CartItemService {
     cartItemRepository.save(cartItemEntity);
   }
 
+  @Transactional
   public void updateCart(CartForm cartForm, Integer id) {
     CartItemEntity cartItemEntity = cartItemRepository.findByIdAndDeletedAtIsNull(id);
     UserEntity userEntity = userRepository.findByIdAndDeletedAtIsNull(cartForm.getUserId());
@@ -54,11 +57,13 @@ public class CartItemService {
     cartItemRepository.save(cartItemEntity);
   }
 
+  @Transactional
   public void deleteCart(CartItemEntity cartItemEntity) {
     cartItemEntity.setDeletedAt(LocalDateTime.now());
     cartItemRepository.save(cartItemEntity);
   }
 
+  @Transactional
   public void deleteCartsByUser(UserEntity userEntity) {
     List<CartItemEntity> cartItemEntities = cartItemRepository.findByUserIdAndDeletedAtIsNull(userEntity.getId());
     for (CartItemEntity cartItemEntity : cartItemEntities) {

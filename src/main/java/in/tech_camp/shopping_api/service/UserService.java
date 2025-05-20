@@ -8,6 +8,7 @@ import in.tech_camp.shopping_api.entity.UserEntity;
 import in.tech_camp.shopping_api.form.LoginForm;
 import in.tech_camp.shopping_api.form.UserForm;
 import in.tech_camp.shopping_api.repository.UserRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class UserService {
@@ -17,11 +18,13 @@ public class UserService {
     this.userRepository = userRepository;
   }
 
+  @Transactional
   public void deleteUser(UserEntity userEntity) {
     userEntity.setDeletedAt(LocalDateTime.now());
     userRepository.save(userEntity);
   }
 
+  @Transactional
   public void registerUser(UserForm userForm) {
     UserEntity userEntity = new UserEntity();
     userEntity.setUserName(userForm.getUserName());
@@ -38,6 +41,7 @@ public class UserService {
     userRepository.save(userEntity);
   }
 
+  @Transactional
   public void updateUser(UserForm userForm, Integer id) {
     UserEntity userEntity = new UserEntity();
     userEntity.setId(id);

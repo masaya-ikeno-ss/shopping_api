@@ -36,6 +36,7 @@ public class ProductService {
     this.categoryRepository = categoryRepository;
   }
 
+  @Transactional
   public void registerProduct(ProductForm productForm) {
     ProductEntity productEntity = new ProductEntity();
     productEntity.setProductName(productForm.getProductName());
@@ -58,6 +59,7 @@ public class ProductService {
     productRepository.save(productEntity);
   }
 
+  @Transactional
   public void updateProduct(ProductForm productForm, Integer productId) {
     ProductEntity productEntity = new ProductEntity();
     productEntity.setId(productId);
