@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import in.tech_camp.shopping_api.dto.CartItemDto;
 import in.tech_camp.shopping_api.entity.CartItemEntity;
 import in.tech_camp.shopping_api.entity.UserEntity;
 import in.tech_camp.shopping_api.form.CartForm;
@@ -42,26 +43,23 @@ public class CartController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<CartItemEntity> findCartById(@PathVariable Integer id) {
+  public ResponseEntity<CartItemDto> findCartById(@PathVariable Integer id) {
     try {
-      CartItemEntity cartItemEntity = cartItemQueryService.findById(id);
-      if (cartItemEntity == null) {
+      CartItemDto cartItemDto = cartItemQueryService.findByIdForDto(id);
+      if (cartItemDto == null) {
         return ResponseEntity.notFound().build();
       }
-      return ResponseEntity.ok(cartItemEntity);
+      return ResponseEntity.ok(cartItemDto);
     } catch (Exception e) {
      return ResponseEntity.badRequest().build();
     }
   }
 
   @GetMapping("/users/{userId}")
-  public ResponseEntity<List<CartItemEntity>> findCartsByUserId(@PathVariable Integer userId) {
+  public ResponseEntity<List<CartItemDto>> findCartsByUserId(@PathVariable Integer userId) {
     try {
-      List<CartItemEntity> cartItemEntities = cartItemQueryService.findByUserId(userId);
-      if (cartItemEntities == null || cartItemEntities.isEmpty()) {
-        return ResponseEntity.notFound().build();
-      }
-      return ResponseEntity.ok(cartItemEntities);
+      List<CartItemDto> cartItems = cartItemQueryService.findByUserIdForDto(userId);
+      return ResponseEntity.ok(cartItems);
     } catch (Exception e) {
      return ResponseEntity.badRequest().build();
     }

@@ -12,6 +12,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import in.tech_camp.shopping_api.controller.CartController;
+import in.tech_camp.shopping_api.dto.CartItemDto;
+import in.tech_camp.shopping_api.dto.ProductDto;
 import in.tech_camp.shopping_api.entity.CartItemEntity;
 import in.tech_camp.shopping_api.entity.ProductEntity;
 import in.tech_camp.shopping_api.entity.UserEntity;
@@ -40,11 +42,11 @@ public class GetCartItemByIdTest {
   @Test
   void IDを用いてカート情報の取得ができた場合() throws Exception {
     UserEntity user = UserFactory.createUserEntity();
-    ProductEntity product = ProductFactory.createProductEntity();
+    ProductDto product = ProductFactory.createProductDto();
 
-    CartItemEntity cartItem = CartItemFactory.createCartItem(user, product);
+    CartItemDto cartItem = CartItemFactory.createCartItemDto(user, product);
 
-    Mockito.when(cartItemQueryService.findById(cartItem.getId())).thenReturn(cartItem);
+    Mockito.when(cartItemQueryService.findByIdForDto(cartItem.getId())).thenReturn(cartItem);
 
     mockMvc.perform(get("/carts/" + user.getId())
             .accept(MediaType.APPLICATION_JSON))

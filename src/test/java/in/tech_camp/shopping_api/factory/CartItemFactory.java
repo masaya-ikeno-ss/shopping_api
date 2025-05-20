@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import in.tech_camp.shopping_api.dto.CartItemDto;
+import in.tech_camp.shopping_api.dto.ProductDto;
 import in.tech_camp.shopping_api.entity.CartItemEntity;
 import in.tech_camp.shopping_api.entity.ProductEntity;
 import in.tech_camp.shopping_api.entity.UserEntity;
@@ -51,5 +53,32 @@ public class CartItemFactory {
     cartForm.setQuantity(2);
 
     return cartForm;
+  }
+
+  public static CartItemDto createCartItemDto(UserEntity user, ProductDto product) {
+    CartItemDto dto = new CartItemDto();
+    dto.setId(1);
+    dto.setUserId(user.getId());
+    dto.setProduct(product);
+    dto.setQuantity(2);
+    dto.setCreatedAt(LocalDateTime.now());
+    return dto;
+  }
+
+  public static List<CartItemDto> createItemDtoList(UserEntity user, List<ProductDto> products) {
+    List<CartItemDto> dtoList = new ArrayList<>();
+    for (ProductDto product : products) {
+      int count = 1;
+      CartItemDto dto = new CartItemDto();
+      dto.setId(count);
+      dto.setUserId(user.getId());
+      dto.setProduct(product);
+      dto.setQuantity(count);
+      dto.setCreatedAt(LocalDateTime.now());
+
+      count += 1;
+      dtoList.add(dto);
+    }
+    return dtoList;
   }
 }
