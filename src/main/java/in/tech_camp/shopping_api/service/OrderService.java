@@ -98,4 +98,15 @@ public class OrderService {
 
       orderRepository.save(orderEntity);
     }
+
+    @Transactional
+    public void updateShippedStatus(OrderEntity orderEntity) {
+      if (orderEntity.getStatus() != OrderStatus.SHIPPING) {
+        throw new IllegalArgumentException("発送可能なステータスではありません");
+      }
+      orderEntity.setStatus(OrderStatus.SHIPPED);
+      orderEntity.setUpdatedAt(LocalDateTime.now());
+
+      orderRepository.save(orderEntity);
+    }
 }
