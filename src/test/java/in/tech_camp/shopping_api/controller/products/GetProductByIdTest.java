@@ -1,6 +1,5 @@
 package in.tech_camp.shopping_api.controller.products;
 
-import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -15,7 +14,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import in.tech_camp.shopping_api.controller.ProductController;
 import in.tech_camp.shopping_api.dto.ProductDto;
-import in.tech_camp.shopping_api.entity.ProductEntity;
 import in.tech_camp.shopping_api.factory.ProductFactory;
 import in.tech_camp.shopping_api.queryService.ProductQueryService;
 import in.tech_camp.shopping_api.service.ProductService;
