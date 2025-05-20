@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import in.tech_camp.shopping_api.controller.ProductController;
-import in.tech_camp.shopping_api.entity.ProductEntity;
+import in.tech_camp.shopping_api.dto.ProductDto;
 import in.tech_camp.shopping_api.factory.ProductFactory;
 import in.tech_camp.shopping_api.queryService.ProductQueryService;
 import in.tech_camp.shopping_api.service.ProductService;
@@ -32,8 +32,8 @@ public class GetProductsTest {
 
   @Test
   void 商品情報の一括取得ができた場合() throws Exception {
-    List<ProductEntity> productList = ProductFactory.createProductEntities();
-    Mockito.when(productQueryService.findAll()).thenReturn(productList);
+    List<ProductDto> productList = ProductFactory.createProductDtoList();
+    Mockito.when(productQueryService.findAllForDto()).thenReturn(productList);
 
     mockMvc.perform(get("/products/")
             .accept(MediaType.APPLICATION_JSON))
@@ -43,12 +43,12 @@ public class GetProductsTest {
 
   @Test
   void 商品情報の一括取得ができなかった場合() throws Exception {
-    List<ProductEntity> productList = null;
-    Mockito.when(productQueryService.findAll()).thenReturn(productList);
+    List<ProductDto> productList = null;
+    Mockito.when(productQueryService.findAllForDto()).thenReturn(productList);
 
     mockMvc.perform(get("/products/")
             .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
-            .andExpect(status().isNotFound());
+            .andExpect(status().isOk());
   }
 }

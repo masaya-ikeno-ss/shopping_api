@@ -14,8 +14,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import in.tech_camp.shopping_api.controller.CartController;
-import in.tech_camp.shopping_api.entity.CartItemEntity;
-import in.tech_camp.shopping_api.entity.ProductEntity;
+import in.tech_camp.shopping_api.dto.CartItemDto;
+import in.tech_camp.shopping_api.dto.ProductDto;
 import in.tech_camp.shopping_api.entity.UserEntity;
 import in.tech_camp.shopping_api.factory.CartItemFactory;
 import in.tech_camp.shopping_api.factory.ProductFactory;
@@ -42,11 +42,11 @@ public class GetCartItemsByUserIdTest {
   @Test
   void ユーザー情報を用いてカート情報の取得ができた場合() throws Exception {
     UserEntity user = UserFactory.createUserEntity();
-    List<ProductEntity> products = ProductFactory.createProductEntities();
+    List<ProductDto> products = ProductFactory.createProductDtoList();
 
-    List<CartItemEntity> cartItems = CartItemFactory.createCartItemsEqualsUser(user, products);
+    List<CartItemDto> cartItems = CartItemFactory.createItemDtoList(user, products);
 
-    Mockito.when(cartItemQueryService.findByUserId(user.getId())).thenReturn(cartItems);
+    Mockito.when(cartItemQueryService.findByUserIdForDto(user.getId())).thenReturn(cartItems);
 
     mockMvc.perform(get("/carts/users/" + user.getId())
             .accept(MediaType.APPLICATION_JSON))
@@ -63,6 +63,6 @@ public class GetCartItemsByUserIdTest {
     mockMvc.perform(get("/carts/users/" + user.getId())
             .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
-            .andExpect(status().isNotFound());
+            .andExpect(status().isOk());
   }
 }

@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import in.tech_camp.shopping_api.controller.UserController;
+import in.tech_camp.shopping_api.dto.UserDto;
 import in.tech_camp.shopping_api.entity.UserEntity;
 import in.tech_camp.shopping_api.factory.UserFactory;
 import in.tech_camp.shopping_api.form.UserForm;
@@ -35,20 +36,18 @@ public class GetUserTest {
   @Test
   void ユーザー情報を取得できた場合() throws Exception {
     UserForm userForm = UserFactory.createDefaultUserForm();
-    UserEntity user = new UserEntity();
+    UserDto user = new UserDto();
     user.setId(1);
     user.setUserName(userForm.getUserName());
     user.setEmail(userForm.getEmail());
-    user.setPassword(userForm.getPassword());
     user.setPhoneNumber(userForm.getPhoneNumber());
     user.setPostcode(userForm.getPostcode());
     user.setAddress(userForm.getAddress());
     user.setIconImage(userForm.getIconImage());
     user.setCreatedAt(LocalDateTime.now());
     user.setUpdatedAt(LocalDateTime.now());
-    user.setDeletedAt(null);
 
-    Mockito.when(userQueryService.getUserById(user.getId())).thenReturn(user);
+    Mockito.when(userQueryService.getUserByIdForDto(user.getId())).thenReturn(user);
 
     mockMvc.perform(get("/users/" + user.getId())
             .accept(MediaType.APPLICATION_JSON))

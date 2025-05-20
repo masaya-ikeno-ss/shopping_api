@@ -94,4 +94,19 @@ public class OrderController {
     }
   }
   
+  @PostMapping("/{orderId}/shipping")
+  public ResponseEntity<Void> orderShipping(@PathVariable Integer orderId) {
+    try {
+      OrderEntity orderEntity = orderQueryService.findById(orderId);
+      if (orderEntity == null) {
+        return ResponseEntity.notFound().build();
+      }
+      orderService.updateShippingStatus(orderEntity);
+      return ResponseEntity.ok().build();
+    } catch (IllegalArgumentException e) {
+      return ResponseEntity.badRequest().build();
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().build();
+    }
+  }
 }

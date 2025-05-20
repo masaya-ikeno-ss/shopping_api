@@ -1,6 +1,5 @@
 package in.tech_camp.shopping_api.controller.products;
 
-import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -14,7 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import in.tech_camp.shopping_api.controller.ProductController;
-import in.tech_camp.shopping_api.entity.ProductEntity;
+import in.tech_camp.shopping_api.dto.ProductDto;
 import in.tech_camp.shopping_api.factory.ProductFactory;
 import in.tech_camp.shopping_api.queryService.ProductQueryService;
 import in.tech_camp.shopping_api.service.ProductService;
@@ -32,8 +31,8 @@ public class GetProductByIdTest {
 
   @Test
   void 商品情報の取得ができた場合() throws Exception {
-    ProductEntity product = ProductFactory.createProductEntity();
-    Mockito.when(productQueryService.findById(product.getId())).thenReturn(product);
+    ProductDto product = ProductFactory.createProductDto();
+    Mockito.when(productQueryService.findByIdForDto(product.getId())).thenReturn(product);
 
     mockMvc.perform(get("/products/" + product.getId())
             .accept(MediaType.APPLICATION_JSON))
@@ -43,9 +42,9 @@ public class GetProductByIdTest {
 
   @Test
   void 商品情報の取得ができなかった場合() throws Exception {
-    ProductEntity product = ProductFactory.createProductEntity();
+    ProductDto product = ProductFactory.createProductDto();
     Integer wrongId = 2;
-    Mockito.when(productQueryService.findById(wrongId)).thenReturn(null);
+    Mockito.when(productQueryService.findByIdForDto(wrongId)).thenReturn(null);
 
     mockMvc.perform(get("/products/" + wrongId)
             .accept(MediaType.APPLICATION_JSON))
