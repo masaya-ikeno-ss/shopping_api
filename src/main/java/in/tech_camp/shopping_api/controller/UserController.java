@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import in.tech_camp.shopping_api.dto.UserDto;
 import in.tech_camp.shopping_api.entity.UserEntity;
 import in.tech_camp.shopping_api.form.LoginForm;
 import in.tech_camp.shopping_api.form.UserForm;
@@ -32,13 +33,13 @@ public class UserController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<UserEntity> getUserById(@PathVariable Integer id) {
+  public ResponseEntity<UserDto> getUserById(@PathVariable Integer id) {
     try {
-      UserEntity userEntity = userQueryService.getUserById(id);
-      if (userEntity == null) {
+      UserDto userDto = userQueryService.getUserByIdForDto(id);
+      if (userDto == null) {
         return ResponseEntity.notFound().build();
       }
-      return ResponseEntity.ok(userEntity);
+      return ResponseEntity.ok(userDto);
     } catch (Exception e) {
       return ResponseEntity.badRequest().build();
     }

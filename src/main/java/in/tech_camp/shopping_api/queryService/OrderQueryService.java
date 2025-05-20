@@ -17,6 +17,10 @@ import in.tech_camp.shopping_api.repository.OrderRepository;
 public class OrderQueryService {
   private final OrderRepository orderRepository;
 
+  public OrderQueryService(OrderRepository orderRepository) {
+    this.orderRepository = orderRepository;
+}
+
   public OrderPreviewResponseDto returnOrder(
     List<CartItemEntity> cartItemEntities, 
     UserEntity user) {
@@ -45,10 +49,6 @@ public class OrderQueryService {
 
       return dto;
     }
-
-  public OrderQueryService(OrderRepository orderRepository) {
-      this.orderRepository = orderRepository;
-  }
 
   public OrderEntity findById(Integer orderId) {
     return orderRepository.findByIdAndDeletedAtIsNull(orderId);
