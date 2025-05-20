@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import in.tech_camp.shopping_api.dto.OrderPreviewResponseDto;
 import in.tech_camp.shopping_api.entity.CartItemEntity;
-import in.tech_camp.shopping_api.entity.OrderEntity;
 import in.tech_camp.shopping_api.entity.UserEntity;
 import in.tech_camp.shopping_api.entity.enums.PaymentMethod;
 import in.tech_camp.shopping_api.queryService.CartItemQueryService;
@@ -34,7 +34,7 @@ public class OrderController {
   }
 
   @PostMapping("/carts/{userId}/orderPreview")
-  public ResponseEntity<OrderEntity> findOrder(
+  public ResponseEntity<OrderPreviewResponseDto> findOrder(
     @RequestBody PaymentMethod paymentMethod, 
     @PathVariable Integer userId) {
     try {
@@ -43,7 +43,7 @@ public class OrderController {
       if (userEntity == null || cartItemEntities == null || cartItemEntities.isEmpty()) {
         return ResponseEntity.notFound().build();
       }
-      OrderEntity order = orderService.returnOrder(paymentMethod, cartItemEntities, userEntity);      
+      OrderPreviewResponseDto order = orderService.returnOrder(paymentMethod, cartItemEntities, userEntity);
       return ResponseEntity.ok(order);
     } catch (Exception e) {
      return ResponseEntity.badRequest().build();
