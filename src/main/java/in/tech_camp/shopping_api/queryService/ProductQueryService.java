@@ -29,29 +29,7 @@ public class ProductQueryService {
     List<ProductEntity> productEntities = productRepository.findAllByDeletedAtIsNull();
     List<ProductDto> productDtoList = new ArrayList<>();
     for (ProductEntity productEntity : productEntities) {
-      ProductDto dto = new ProductDto();
-      dto.setId(productEntity.getId());
-      dto.setProductName(productEntity.getProductName());
-      dto.setPrice(productEntity.getPrice());
-      dto.setStockQuantity(productEntity.getStockQuantity());
-      dto.setDescription(productEntity.getDescription());
-
-      List<ProductImageEntity> productImageEntities = productEntity.getProductImages();
-      List<String> imageUrls = new ArrayList<>();
-      for (ProductImageEntity image : productImageEntities) {
-        imageUrls.add(image.getImageUrl());
-      }
-      dto.setProductImages(imageUrls);
-
-      Set<CategoryEntity> categoryEntities = productEntity.getCategories();
-      Set<String> categories = new HashSet<>();
-      for (CategoryEntity category : categoryEntities) {
-        categories.add(category.getCategoryName());
-      }
-      dto.setCategories(categories);
-
-      dto.setCreatedAt(productEntity.getCreatedAt());
-      dto.setUpdatedAt(productEntity.getUpdatedAt());
+      ProductDto dto = createProductDto(productEntity);
 
       productDtoList.add(dto);
     }
@@ -67,6 +45,25 @@ public class ProductQueryService {
     if (productEntity == null) {
       return null;
     }
+    return createProductDto(productEntity);
+  }
+
+  public List<ProductEntity> findByCategoryId(Integer id) {
+    return productRepository.findByCategories_IdAndDeletedAtIsNull(id);
+  }
+
+  public List<ProductDto> findByCategoryIdForDto(Integer id) {
+    List<ProductEntity> productEntities = productRepository.findByCategories_IdAndDeletedAtIsNull(id);
+    List<ProductDto> productDtoList = new ArrayList<>();
+    for (ProductEntity productEntity : productEntities) {
+      ProductDto dto = createProductDto(productEntity);
+
+      productDtoList.add(dto);
+    }
+    return productDtoList;
+  }
+
+  private ProductDto createProductDto(ProductEntity productEntity) {
     ProductDto dto = new ProductDto();
     dto.setId(productEntity.getId());
     dto.setProductName(productEntity.getProductName());
@@ -91,42 +88,5 @@ public class ProductQueryService {
     dto.setCreatedAt(productEntity.getCreatedAt());
     dto.setUpdatedAt(productEntity.getUpdatedAt());
     return dto;
-  }
-
-  public List<ProductEntity> findByCategoryId(Integer id) {
-    return productRepository.findByCategories_IdAndDeletedAtIsNull(id);
-  }
-
-  public List<ProductDto> findByCategoryIdForDto(Integer id) {
-    List<ProductEntity> productEntities = productRepository.findByCategories_IdAndDeletedAtIsNull(id);
-    List<ProductDto> productDtoList = new ArrayList<>();
-    for (ProductEntity productEntity : productEntities) {
-      ProductDto dto = new ProductDto();
-      dto.setId(productEntity.getId());
-      dto.setProductName(productEntity.getProductName());
-      dto.setPrice(productEntity.getPrice());
-      dto.setStockQuantity(productEntity.getStockQuantity());
-      dto.setDescription(productEntity.getDescription());
-
-      List<ProductImageEntity> productImageEntities = productEntity.getProductImages();
-      List<String> imageUrls = new ArrayList<>();
-      for (ProductImageEntity image : productImageEntities) {
-        imageUrls.add(image.getImageUrl());
-      }
-      dto.setProductImages(imageUrls);
-
-      Set<CategoryEntity> categoryEntities = productEntity.getCategories();
-      Set<String> categories = new HashSet<>();
-      for (CategoryEntity category : categoryEntities) {
-        categories.add(category.getCategoryName());
-      }
-      dto.setCategories(categories);
-
-      dto.setCreatedAt(productEntity.getCreatedAt());
-      dto.setUpdatedAt(productEntity.getUpdatedAt());
-
-      productDtoList.add(dto);
-    }
-    return productDtoList;
   }
 }
