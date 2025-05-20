@@ -15,6 +15,7 @@ import in.tech_camp.shopping_api.entity.UserEntity;
 import in.tech_camp.shopping_api.entity.enums.PaymentMethod;
 import in.tech_camp.shopping_api.queryService.CartItemQueryService;
 import in.tech_camp.shopping_api.queryService.UserQueryService;
+import in.tech_camp.shopping_api.service.CartItemService;
 import in.tech_camp.shopping_api.service.OrderService;
 
 @RestController
@@ -23,14 +24,17 @@ public class OrderController {
   private final OrderService orderService;
   private final UserQueryService userQueryService;
   private final CartItemQueryService cartItemQueryService;
+  private final CartItemService cartItemService;
 
   public OrderController(
     OrderService orderService,
     UserQueryService userQueryService,
-    CartItemQueryService cartItemQueryService) {
+    CartItemQueryService cartItemQueryService,
+    CartItemService cartItemService) {
       this.orderService = orderService;
       this.userQueryService = userQueryService;
       this.cartItemQueryService = cartItemQueryService;
+      this.cartItemService = cartItemService;
   }
 
   @PostMapping("/carts/{userId}/orderPreview")
@@ -50,7 +54,7 @@ public class OrderController {
   }
 
   @PostMapping("/carts/{userId}/order")
-  public ResponseEntity<OrderPreviewResponseDto> registerOrder(
+  public ResponseEntity<?> registerOrder(
     @RequestBody PaymentMethod paymentMethod,
     @PathVariable Integer userId) {
     try {
@@ -59,8 +63,11 @@ public class OrderController {
       if (userEntity == null || cartItemEntities == null || cartItemEntities.isEmpty()) {
         return ResponseEntity.notFound().build();
       }
-      OrderPreviewResponseDto order = orderService.registerOrder(paymentMethod, cartItemEntities, userEntity);
-      return ResponseEntity.ok(order);
+      orderService.registerOrder(paymentMethod, cartItemEntities, userEntity);
+      cartItemService.deleteCartsByUser(userEntity);
+      return ResponseEntity.ok().build();
+    } catch (IllegalArgumentException e) {
+      return ResponseEntity.status(409).body(e.getMessage());
     } catch (Exception e) {
      return ResponseEntity.badRequest().build();
     }
