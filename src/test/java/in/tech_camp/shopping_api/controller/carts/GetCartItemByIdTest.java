@@ -5,12 +5,14 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import in.tech_camp.shopping_api.config.SecurityConfig;
 import in.tech_camp.shopping_api.controller.CartController;
 import in.tech_camp.shopping_api.dto.CartItemDto;
 import in.tech_camp.shopping_api.dto.ProductDto;
@@ -23,6 +25,7 @@ import in.tech_camp.shopping_api.queryService.UserQueryService;
 import in.tech_camp.shopping_api.service.CartItemService;
 
 @WebMvcTest(CartController.class)
+@Import(SecurityConfig.class)
 public class GetCartItemByIdTest {
   
   @Autowired

@@ -2,6 +2,7 @@ package in.tech_camp.shopping_api.service;
 
 import java.time.LocalDateTime;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import in.tech_camp.shopping_api.entity.UserEntity;
@@ -13,9 +14,11 @@ import jakarta.transaction.Transactional;
 @Service
 public class UserService {
   private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
 
-  public UserService(UserRepository userRepository) {
+  public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
     this.userRepository = userRepository;
+    this.passwordEncoder = passwordEncoder;
   }
 
   @Transactional
@@ -29,7 +32,8 @@ public class UserService {
     UserEntity userEntity = new UserEntity();
     userEntity.setUserName(userForm.getUserName());
     userEntity.setEmail(userForm.getEmail());
-    userEntity.setPassword(userForm.getPassword());
+    String encodedPassword = encodePassword(userForm.getPassword());
+    userEntity.setPassword(encodedPassword);
     userEntity.setPhoneNumber(userForm.getPhoneNumber());
     userEntity.setPostcode(userForm.getPostcode());
     userEntity.setAddress(userForm.getAddress());
@@ -47,7 +51,8 @@ public class UserService {
     userEntity.setId(id);
     userEntity.setUserName(userForm.getUserName());
     userEntity.setEmail(userForm.getEmail());
-    userEntity.setPassword(userForm.getPassword());
+    String encodedPassword = encodePassword(userForm.getPassword());
+    userEntity.setPassword(encodedPassword);
     userEntity.setPhoneNumber(userForm.getPhoneNumber());
     userEntity.setPostcode(userForm.getPostcode());
     userEntity.setAddress(userForm.getAddress());
@@ -65,5 +70,9 @@ public class UserService {
       throw new IllegalArgumentException("パスワードが正しくありません");
     }
     return userEntity;
+  }
+
+  private String encodePassword(String password) {
+    return passwordEncoder.encode(password);
   }
 }
